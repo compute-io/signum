@@ -19,14 +19,33 @@ For use in the browser, use [browserify](https://github.com/substack/node-browse
 To use the module,
 
 ``` javascript
-var lib = require( 'compute-signum' );
+var signum = require( 'compute-signum' );
+```
+
+#### signum( x )
+
+Evaluates the signum function. The method accepts a single argument: either a single `numeric` value or an `array` of numeric values, which may include `NaN`, `+infinity`, and `-infinity`. For an input `array`, the signum function is evaluated for each value.
+
+``` javascript
+signum( -10 );
+// returns -1
+
+signum( [ -10, -1, -0, 0, 1, 10 ] );
+// returns [...]
 ```
 
 
 ## Examples
 
 ``` javascript
-var lib = require( 'compute-signum' );
+var signum = require( 'compute-signum' );
+
+var data = new Array( 100 );
+for ( var i = 0; i < data.length; i++ ) {
+	data[ i ] = Math.random() - 0.5;
+}
+
+console.log( signum( data ) );
 ```
 
 To run the example code from the top-level application directory,
@@ -34,6 +53,21 @@ To run the example code from the top-level application directory,
 ``` bash
 $ node ./examples/index.js
 ```
+
+
+## Notes
+
+Table of results:
+
+Value | Sign  
+:---: | :---: |
+`x < 0` | `-1`
+`x > 0` | `+1`
+`0` | `0`
+`-0` | `-0`
+`NaN` | `NaN`
+
+The above results are compatible with an ECMAScript 6 [proposal](http://people.mozilla.org/~jorendorff/es6-draft.html#sec-math.sign) from Mozilla, which would extend the `Math` object to include the method `Math.sign()`. Currently, only [Mozilla](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/sign) implements this proposal.
 
 
 ## Tests

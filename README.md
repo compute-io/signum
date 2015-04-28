@@ -2,7 +2,7 @@ signum
 ===
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependencies][dependencies-image]][dependencies-url]
 
-> Signum function.
+> [Signum](http://en.wikipedia.org/wiki/Sign_function) function.
 
 
 ## Installation
@@ -16,23 +16,76 @@ For use in the browser, use [browserify](https://github.com/substack/node-browse
 
 ## Usage
 
-To use the module,
-
 ``` javascript
 var signum = require( 'compute-signum' );
 ```
 
-#### signum( x )
+#### signum( x[, options] )
 
-Evaluates the signum function. The method accepts a single argument: either a single `numeric` value or an `array` of numeric values, which may include `NaN`, `+infinity`, and `-infinity`. For an input `array`, the signum function is evaluated for each value.
+Evaluates the [signum](http://en.wikipedia.org/wiki/Sign_function) function. The method accepts as its first argument either a single `numeric` value or an `array` of numeric values, which may include `NaN`, `+infinity`, and `-infinity`. For an input `array`, the [signum](http://en.wikipedia.org/wiki/Sign_function) function is evaluated for each value.
 
 ``` javascript
-signum( -10 );
+var sgn = signum( -10 );
 // returns -1
 
-signum( [ -10, -1, -0, 0, 1, 10 ] );
-// returns [...]
+var sgns = signum( [ -10, -1, -0, 0, 1, 10 ] );
+// returns [ -1, -1, 0, 0, 1, 1 ]
 ```
+
+When provided an input `array`, the function accepts two `options`:
+
+*  __copy__: `boolean` indicating whether to return a new `array` containing the signum values. Default: `true`.
+*  __accessor__: accessor `function` for accessing numeric values in object `arrays`.
+
+To mutate the input `array` (e.g. when input values can be discarded or when optimizing memory usage), set the `copy` option to `false`.
+
+``` javascript
+var arr = [ -10, -1, -0, 0, 1, 10 ];
+
+var sgns = signum( arr );
+// returns [ -1, -1, -0, 0, 1, 1 ]
+
+console.log( arr === sgns );
+// returns true
+```
+
+For object `arrays`, provide an accessor `function` for accessing `array` values.
+
+``` javascript
+var data = [
+	['beep', -10],
+	['boop', -1],
+	['bap', 1],
+	['baz', 10]
+];
+
+function getValue( d, i ) {
+	return d[ 1 ];
+}
+
+var sgns = signum( data, getValue );
+// returns [ -1, -1, 1, 1 ]
+```
+
+__Note__: the function returns an `array` with a length equal to the original input `array`.
+
+
+
+
+## Notes
+
+Table of results:
+
+Value | Sign  
+:---: | :---: |
+`x > 0` | `+1`
+`x < 0` | `-1`
+`0` | `0`
+`-0` | `-0`
+`NaN` | `NaN`
+
+The above results are compatible with an ECMAScript 6 [proposal](http://people.mozilla.org/~jorendorff/es6-draft.html#sec-math.sign) from Mozilla, which would extend the `Math` object to include the method `Math.sign()`. Currently, only [Mozilla](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/sign) implements this proposal.
+
 
 
 ## Examples
@@ -55,26 +108,12 @@ $ node ./examples/index.js
 ```
 
 
-## Notes
-
-Table of results:
-
-Value | Sign  
-:---: | :---: |
-`x > 0` | `+1`
-`x < 0` | `-1`
-`0` | `0`
-`-0` | `-0`
-`NaN` | `NaN`
-
-The above results are compatible with an ECMAScript 6 [proposal](http://people.mozilla.org/~jorendorff/es6-draft.html#sec-math.sign) from Mozilla, which would extend the `Math` object to include the method `Math.sign()`. Currently, only [Mozilla](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/sign) implements this proposal.
-
 
 ## Tests
 
 ### Unit
 
-Unit tests use the [Mocha](http://visionmedia.github.io/mocha) test framework with [Chai](http://chaijs.com) assertions. To run the tests, execute the following command in the top-level application directory:
+Unit tests use the [Mocha](http://mochajs.org) test framework with [Chai](http://chaijs.com) assertions. To run the tests, execute the following command in the top-level application directory:
 
 ``` bash
 $ make test
@@ -98,15 +137,15 @@ $ make view-cov
 ```
 
 
+---
 ## License
 
-[MIT license](http://opensource.org/licenses/MIT). 
+[MIT license](http://opensource.org/licenses/MIT).
 
 
----
 ## Copyright
 
-Copyright &copy; 2014. Athan Reines.
+Copyright &copy; 2014-2015. Athan Reines.
 
 
 [npm-image]: http://img.shields.io/npm/v/compute-signum.svg

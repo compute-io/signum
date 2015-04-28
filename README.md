@@ -42,7 +42,9 @@ To mutate the input `array` (e.g. when input values can be discarded or when opt
 ``` javascript
 var arr = [ -10, -1, -0, 0, 1, 10 ];
 
-var sgns = signum( arr );
+var sgns = signum( arr, {
+	'copy': false
+});
 // returns [ -1, -1, -0, 0, 1, 1 ]
 
 console.log( arr === sgns );

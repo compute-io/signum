@@ -32,7 +32,7 @@ signum( [ -10, -1, -0, 0, 1, 10 ] );
 // returns [ -1, -1, 0, 0, 1, 1 ]
 ```
 
-In case of an input `array`, the function accepts two `options`:
+For the case of an input `array`, the function accepts two `options`:
 
 *  __copy__: `boolean` indicating whether to return a new `array` containing the signum values. Default: `true`.
 *  __accessor__: accessor `function` for accessing numerical values in object `arrays`.
@@ -53,7 +53,7 @@ function getValue( d ) {
 	return d[ 1 ];
 }
 
-var arr = cprod( arr, getValue );
+var arr = signum( arr, getValue );
 // returns [ -1, -1, 1, 1 ]
 ```
 

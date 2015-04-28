@@ -1,3 +1,5 @@
+'use strict';
+
 var signum = require( './../lib' );
 
 var data = new Array( 100 );

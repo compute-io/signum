@@ -1,3 +1,5 @@
+/* global require, describe, it */
+'use strict';
 
 // MODULES //
 
@@ -17,7 +19,6 @@ var expect = chai.expect,
 // TESTS //
 
 describe( 'compute-signum', function tests() {
-	'use strict';
 
 	it( 'should export a function', function test() {
 		expect( signum ).to.be.a( 'function' );
@@ -108,6 +109,86 @@ describe( 'compute-signum', function tests() {
 		}
 	});
 
+	it( 'should throw an error if provided options argument is not an object', function test() {
+		var values = [
+			'5',
+			5,
+			true,
+			undefined,
+			null,
+			NaN,
+			function(){},
+			[]
+		];
+
+		for ( var i = 0; i < values.length; i++ ) {
+			expect( badValue( values[i] ) ).to.throw( TypeError );
+		}
+		function badValue( value ) {
+			return function() {
+				signum( [], value );
+			};
+		}
+	});
+
+
+	it( 'should throw an error if provided an accessor which is not a function', function test() {
+		var values = [
+			'5',
+			5,
+			true,
+			undefined,
+			null,
+			NaN,
+			[],
+			{}
+		];
+
+		for ( var i = 0; i < values.length; i++ ) {
+			expect( badValue( values[ i ] ) ).to.throw( TypeError );
+		}
+		function badValue( value ) {
+			return function() {
+				signum( [], { 'accessor': value } );
+			};
+		}
+	});
+
+	it( 'should throw an error if provided a copy option which is not a boolean', function test() {
+		var values = [
+			'5',
+			5,
+			function(){},
+			undefined,
+			null,
+			NaN,
+			[],
+			{}
+		];
+
+		for ( var i = 0; i < values.length; i++ ) {
+			expect( badValue( values[ i ] ) ).to.throw( TypeError );
+		}
+
+		function badValue( value ) {
+			return function() {
+				signum( [1,-2,3,-4,5], {'copy': value} );
+			};
+		}
+	});
+
+	it( 'should not mutate the input array by default', function test() {
+		var data, expected, actual;
+
+		data = [ 1, -2, 3 ];
+		expected = [ 1, -1, 1 ];
+
+		actual = signum( data );
+		assert.deepEqual( actual, expected );
+		assert.ok( actual !== data );
+	});
+
+
 	it( 'should evaluate the signum function', function test() {
 		var values, expected, actual;
 
@@ -119,5 +200,43 @@ describe( 'compute-signum', function tests() {
 
 		assert.deepEqual( actual, expected );
 	});
+
+
+	it( 'should evaluate the signum function using an accessor function', function test() {
+		var data, expected, results;
+
+		data = [
+			{'x':10},
+			{'x':-1},
+			{'x':234},
+			{'x':-0.344},
+			{'x':5},
+			{'x':0},
+			{'x':-0}
+		];
+		expected = [ 1, -1, 1, -1, 1, 0, -0 ];
+
+		results = signum( data, { 'accessor':getValue } );
+
+		assert.strictEqual( results.length, data.length );
+		assert.deepEqual( results, expected );
+
+		function getValue( d ) {
+			return d.x;
+		}
+	});
+
+	it( 'should compute the signum function and mutate the input array', function test() {
+
+		var values, expected, actual;
+
+		values = [ 10, -1, 234, -0.344, 5, 0, -0 ];
+		expected = [ 1, -1, 1, -1, 1, 0, -0 ];
+
+		actual = signum( values, { 'copy':false } );
+		assert.deepEqual( actual, expected );
+		assert.ok( actual === values );
+	});
+
 
 });

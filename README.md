@@ -35,7 +35,7 @@ var sgns = signum( [ -10, -1, -0, 0, 1, 10 ] );
 When provided an input `array`, the function accepts two `options`:
 
 *  __copy__: `boolean` indicating whether to return a new `array` containing the signum values. Default: `true`.
-*  __accessor__: accessor `function` for accessing numerical values in object `arrays`.
+*  __accessor__: accessor `function` for accessing numeric values in object `arrays`.
 
 To mutate the input `array` (e.g. when input values can be discarded or when optimizing memory usage), set the `copy` option to `false`.
 

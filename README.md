@@ -65,7 +65,9 @@ function getValue( d, i ) {
 	return d[ 1 ];
 }
 
-var sgns = signum( data, getValue );
+var sgns = signum( data, {
+	'accessor': getValue
+});
 // returns [ -1, -1, 1, 1 ]
 ```
 

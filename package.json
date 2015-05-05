@@ -1,6 +1,6 @@
 {
   "name": "compute-signum",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Signum function.",
   "author": {
     "name": "Athan Reines",

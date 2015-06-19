@@ -12,7 +12,7 @@ var // Expectation library:
 	// Module to be tested:
 	signum = require( './../lib/matrix.js' ),
 
-	// Error function:
+	// Signum function:
 	SIGN = require( './../lib/number.js' );
 
 

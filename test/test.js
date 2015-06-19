@@ -6,8 +6,14 @@
 var // Expectation library:
 	chai = require( 'chai' ),
 
+	// Matrix data structure:
+	matrix = require( 'dstructs-matrix' ),
+
 	// Module to be tested:
-	signum = require( './../lib' );
+	signum = require( './../lib' ),
+
+	// Error function:
+	SIGN = require( './../lib/number.js' );
 
 
 // VARIABLES //
@@ -24,22 +30,19 @@ describe( 'compute-signum', function tests() {
 		expect( signum ).to.be.a( 'function' );
 	});
 
-	it( 'should throw an error if not provided a numeric value or a numeric array', function test() {
+	it( 'should throw an error if the first argument is neither a number, NaN or array-like or matrix-like', function test() {
 		var values = [
-			'5',
-			new Number( 5 ),
+			// '5', // valid as is array-like (length)
 			true,
 			undefined,
 			null,
-			{},
 			function(){},
-			[1,'2',3]
+			{}
 		];
 
 		for ( var i = 0; i < values.length; i++ ) {
 			expect( badValue( values[i] ) ).to.throw( TypeError );
 		}
-
 		function badValue( value ) {
 			return function() {
 				signum( value );
@@ -47,64 +50,7 @@ describe( 'compute-signum', function tests() {
 		}
 	});
 
-	it( 'should throw an error if an input array contains non-numeric values', function test() {
-		var values = [
-			'5',
-			true,
-			undefined,
-			null,
-			[],
-			{},
-			function(){}
-		];
-
-		for ( var i = 0; i < values.length; i++ ) {
-			expect( badValue( values[i] ) ).to.throw( TypeError );
-		}
-
-		function badValue( value ) {
-			return function() {
-				signum( [ value ] );
-			};
-		}
-	});
-
-	it( 'should throw an error if an accessed value is not numeric', function test() {
-		expect( badValue ).to.throw( TypeError );
-
-		function badValue() {
-			signum( [{'x':'beep'}], {
-				'accessor': getValue
-			});
-		}
-		function getValue( d ) {
-			return d.x;
-		}
-	});
-
-	it( 'should throw an error if provided an options argument which is not an object', function test() {
-		var values = [
-			'5',
-			5,
-			true,
-			undefined,
-			null,
-			NaN,
-			function(){},
-			[]
-		];
-
-		for ( var i = 0; i < values.length; i++ ) {
-			expect( badValue( values[i] ) ).to.throw( TypeError );
-		}
-		function badValue( value ) {
-			return function() {
-				signum( [1,2,3], value );
-			};
-		}
-	});
-
-	it( 'should throw an error if provided an accessor which is not a function', function test() {
+	it( 'should throw an error if provided an invalid option', function test() {
 		var values = [
 			'5',
 			5,
@@ -117,7 +63,7 @@ describe( 'compute-signum', function tests() {
 		];
 
 		for ( var i = 0; i < values.length; i++ ) {
-			expect( badValue( values[ i ] ) ).to.throw( TypeError );
+			expect( badValue( values[i] ) ).to.throw( TypeError );
 		}
 		function badValue( value ) {
 			return function() {
@@ -128,141 +74,176 @@ describe( 'compute-signum', function tests() {
 		}
 	});
 
-	it( 'should throw an error if provided a `copy` option which is not a boolean primitive', function test() {
-		var values = [
-			'5',
-			5,
-			new Boolean( true ),
-			function(){},
-			undefined,
-			null,
-			NaN,
-			[],
-			{}
-		];
+	it( 'should compute the error function when provided a number', function test() {
+		assert.strictEqual( signum( 0 ), 0 );
 
-		for ( var i = 0; i < values.length; i++ ) {
-			expect( badValue( values[ i ] ) ).to.throw( TypeError );
-		}
-
-		function badValue( value ) {
-			return function() {
-				signum( [1,-2,3,-4,5], {
-					'copy': value
-				});
-			};
-		}
-	});
-
-	it( 'should return a numeric value if provided a numeric value', function test() {
-		assert.isNumber( signum( 1 ) );
-	});
-
-	it( 'should return NaN if provided a NaN', function test() {
 		var val = signum( NaN );
 		assert.isNumber( val );
 		assert.ok( val !== val );
+		
+		assert.strictEqual( signum( 2 ), 1 );
+		assert.strictEqual( signum( -3 ), -1 );
 	});
 
-	it( 'should return 1 if provided a positive number', function test() {
-		var val = signum( 10 );
-		assert.strictEqual( val, 1 );
-	});
+	it( 'should evaluate the signum function when provided a plain array', function test() {
+		var data, actual, expected;
 
-	it( 'should return -1 if provided a negative number', function test() {
-		var val = signum( -10 );
-		assert.strictEqual( val, -1 );
-	});
+		data = [ -3, -2, -1, 0, 1, 2, 3 ];
 
-	it( 'should return 0 if provided zero', function test() {
-		var val = signum( 0 );
-		assert.strictEqual( val, 0 );
-	});
-
-	it( 'should return -0 if provided negative zero', function test() {
-		var val = signum( -0 );
-		assert.strictEqual( val, -0 );
-		assert.strictEqual( 1/val, Number.NEGATIVE_INFINITY );
-	});
-
-	it( 'should return an array of numbers if provided an array', function test() {
-		var values = [ 10, -1, 234, -0.344, 5 ],
-			arr;
-
-		arr = signum( values );
-		assert.isArray( arr );
-		for ( var i = 0; i < arr.length; i++ ) {
-			assert.isNumber( arr[ i ] );
-		}
-	});
-
-	it( 'should return an empty array if provided an empty array', function test() {
-		var actual = signum( [] );
-		assert.ok( actual.length === 0 );
-	});
-
-	it( 'should not mutate the input array by default', function test() {
-		var data, expected, actual;
-
-		data = [ 1, -2, 3 ];
+		expected = [ -1, -1, -1, 0, 1, 1, 1];
 
 		actual = signum( data );
-		expected = [ 1, -1, 1 ];
+		assert.notEqual( actual, data );
 
 		assert.deepEqual( actual, expected );
-		assert.ok( actual !== data );
+
+		// Mutate...
+		actual = signum( data, {
+			'copy': false
+		});
+		assert.strictEqual( actual, data );
+
+		assert.deepEqual( data, expected );
 	});
 
-	it( 'should evaluate the signum function', function test() {
-		var values, expected, actual;
+	it( 'should evaluate the signum function when provided a typed array', function test() {
+		var data, actual, expected;
 
-		values = [ 10, -1, 234, -0.344, 5, 0, -0 ];
+		data = new Int8Array( [ -3, -2, -1, 0, 1, 2, 3 ] );
 
-		actual = signum( values );
-		expected = [ 1, -1, 1, -1, 1, 0, -0 ];
+		expected = new Int8Array( [ -1, -1, -1, 0, 1, 1, 1 ] );
+
+		actual = signum( data );
+		assert.notEqual( actual, data );
 
 		assert.deepEqual( actual, expected );
+
+		// Mutate:
+		actual = signum( data, {
+			'copy': false
+		});
+		expected = new Int8Array( [ -1, -1, -1, 0, 1, 1, 1 ] );
+		assert.strictEqual( actual, data );
+
+		assert.deepEqual( data, expected );
 	});
 
-	it( 'should evaluate the signum function using an accessor function', function test() {
-		var data, expected, actual;
+	it( 'should evaluate the signum function element-wise using an accessor', function test() {
+		var data, actual, expected;
 
 		data = [
-			{'x':10},
-			{'x':-1},
-			{'x':234},
-			{'x':-0.344},
-			{'x':5},
-			{'x':0},
-			{'x':-0}
+			[0,-3],
+			[1,-2],
+			[2,-1],
+			[3,0],
+			[4,1],
+			[5,2],
+			[6,3]
 		];
+
+		expected = [ -1, -1, -1, 0, 1, 1, 1];
 
 		actual = signum( data, {
 			'accessor': getValue
 		});
-		expected = [ 1, -1, 1, -1, 1, 0, -0 ];
+		assert.notEqual( actual, data );
 
-		assert.strictEqual( actual.length, data.length );
 		assert.deepEqual( actual, expected );
 
+		// Mutate:
+		actual = signum( data, {
+			'accessor': getValue,
+			'copy': false
+		});
+		assert.strictEqual( actual, data );
+
+		assert.deepEqual( data, expected );
+
 		function getValue( d ) {
-			return d.x;
+			return d[ 1 ];
 		}
 	});
 
-	it( 'should evaluate the signum function and mutate the input array', function test() {
+	it( 'should evaluate the signum function element-wise and deep set', function test() {
+		var data, actual, expected, i;
 
-		var values, expected, actual;
+		data = [
+			{'x':[0,-3]},
+			{'x':[1,-2]},
+			{'x':[2,-1]},
+			{'x':[3,0]},
+			{'x':[4,1]},
+			{'x':[5,2]},
+			{'x':[6,3]}
+		];
+		expected = [
+			{'x':[0,-1]},
+			{'x':[1,-1]},
+			{'x':[2,-1]},
+			{'x':[3,0]},
+			{'x':[4,1]},
+			{'x':[5,1]},
+			{'x':[6,1]}
+		];
 
-		values = [ 10, -1, 234, -0.344, 5, 0, -0 ];
-
-		actual = signum( values, {
-			'copy':false
+		actual = signum( data, {
+			'path': 'x.1'
 		});
-		expected = [ 1, -1, 1, -1, 1, 0, -0 ];
+
+		assert.strictEqual( actual, data );
 
 		assert.deepEqual( actual, expected );
-		assert.ok( actual === values );
+
+		// Specify a path with a custom separator...
+		data = [
+			{'x':[0,-3]},
+			{'x':[1,-2]},
+			{'x':[2,-1]},
+			{'x':[3,0]},
+			{'x':[4,1]},
+			{'x':[5,2]},
+			{'x':[6,3]}
+		];
+		actual = signum( data, {
+			'path': 'x/1',
+			'sep': '/'
+		});
+		assert.strictEqual( actual, data );
+
+		assert.deepEqual( actual, expected );
+
+	});
+
+	it( 'should evaluate the signum function element-wise when provided a matrix', function test() {
+		var mat,
+			out,
+			d1,
+			d2,
+			i;
+
+		d1 = new Int8Array( 100 );
+		d2 = new Int8Array( 100 );
+		for ( i = 0; i < d1.length; i++ ) {
+			d1[ i ] = i < 50 ? -i : i;
+			d2[ i ] = SIGN( d1[ i ] );
+		}
+		mat = matrix( d1, [10,10], 'int8' );
+		out = signum( mat );
+
+		assert.deepEqual( out.data, d2 );
+
+		// Mutate...
+		out = signum( mat, {
+			'copy': false
+		});
+		assert.strictEqual( mat, out );
+		assert.deepEqual( mat.data, d2 );
+	});
+
+	it( 'should return `null` if provided an empty data structure', function test() {
+		assert.isNull( signum( [] ) );
+		assert.isNull( signum( matrix( [0,0] ) ) );
+		assert.isNull( signum( new Int8Array() ) );
 	});
 
 });

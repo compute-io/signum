@@ -6,8 +6,8 @@ signum
 
 The [Signum](http://en.wikipedia.org/wiki/Sign_function) function is defined as
 
-<div class="equation" align="center" data-raw-text="\operatorname{sign}(x) := \begin{cases} -1 & \text{if } x < 0, \\ 0 & \text{if } x = 0, \\ 1 & \text{if } x > 0. \end{cases}" data-equation="eq:signum_function">
-	<img src="https://cdn.rawgit.com/compute-io/signum/f96aeca1313d08e9b11fa21100542b74b90d2e59/docs/img/eqn.svg" alt="Definition of the signum function.">
+<div class="equation" align="center" data-raw-text="\operatorname{sign}(x) := \begin{cases} -1, &amp; \textrm{if}\ x < 0 \\ 0 &amp; \textrm{if}\ x = 0 \\ 1 &amp; \textrm{if}\ x > 0 \end{cases} " data-equation="eq:signum_function">
+	<img src="https://cdn.rawgit.com/compute-io/signum/18eab5191cc0a8604bf7d2fd95b12f66a30b1c12/docs/img/eqn.svg" alt="Definition of the signum function.">
 	<br>
 </div>
 

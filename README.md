@@ -49,19 +49,19 @@ data = [ -2, 0, 2 ];
 out = signum( data );
 // returns [ -1, 0, 1 ]
 
-data = new Int8Array( data );
+data = new Float64Array( data );
 out = signum( data );
 // returns Int8Array( [ -1, 0, 1 ] )
 
-data = new Int8Array( 6 );
+data = new Float64Array( 6 );
 for ( i = 0; i < 6; i++ ) {
 	data[ i ] = i - 3;
 }
-mat = matrix( data, [3,2], 'int8' );
+mat = matrix( data, [3,2], 'float64' );
 /*
 	[  -3  -2
-	   -1  0
-	   1  2 ]
+	   -1   0
+	    1   2 ]
 */
 
 out = signum( mat );
@@ -171,6 +171,7 @@ bool = ( mat === out );
 ```
 
 When provided a [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays) or [`matrix`](https://github.com/dstructs/matrix), the output data structure is of type `int8`. In case that the input `x` is mutated, the original data type of the [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays) or [`matrix`](https://github.com/dstructs/matrix) is preserved.
+
 
 ## Notes
 

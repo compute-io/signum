@@ -35,12 +35,16 @@ describe( 'array signum', function tests() {
 		expected = [ 1, -1, 1, -1, 1, 0, -0 ];
 
 		assert.deepEqual( actual, expected );
-
 	});
 
-	it( 'should return null if provided an empty array', function test() {
-		assert.isNull( signum( [], [] ) );
-		assert.isNull( signum( new Int8Array(), new Int8Array() ) );
+	it( 'should return an empty array if provided an empty array', function test() {
+		var s;
+
+		s = signum( [], [] );
+		assert.deepEqual( s, [] );
+
+		s = signum( new Int8Array(), new Int8Array() );
+		assert.deepEqual( s, new Int8Array() );
 	});
 
 });

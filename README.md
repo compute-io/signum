@@ -6,8 +6,8 @@ signum
 
 The [Signum](http://en.wikipedia.org/wiki/Sign_function) function is defined as
 
-<div class="equation" align="center" data-raw-text="\operatorname{sign}(x) := \begin{cases} -1, &amp; \textrm{if}\ x < 0 \\ 0 &amp; \textrm{if}\ x = 0 \\ 1 &amp; \textrm{if}\ x > 0 \end{cases} " data-equation="eq:signum_function">
-	<img src="https://cdn.rawgit.com/compute-io/signum/18eab5191cc0a8604bf7d2fd95b12f66a30b1c12/docs/img/eqn.svg" alt="Definition of the signum function.">
+<div class="equation" align="center" data-raw-text="\operatorname{sign}(x) := \begin{cases} -1 &amp; \textrm{if}\ x < 0 \\ 0 &amp; \textrm{if}\ x = 0 \\ 1 &amp; \textrm{if}\ x > 0 \end{cases}" data-equation="eq:signum_function">
+	<img src="" alt="Definition of the signum function.">
 	<br>
 </div>
 
@@ -153,8 +153,8 @@ for ( i = 0; i < 6; i++ ) {
 }
 mat = matrix( data, [3,2], 'int8' );
 /*
-	[  -3  -2
-	   -1  0
+	[ -3 -2
+	  -1  0
 	   1  2 ]
 */
 
@@ -171,7 +171,7 @@ bool = ( mat === out );
 // returns true
 ```
 
-When provided a [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays) or [`matrix`](https://github.com/dstructs/matrix), the output data structure is of type `int8`. In case that the input `x` is mutated, the original data type of the [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays) or [`matrix`](https://github.com/dstructs/matrix) is preserved.
+When provided a [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays) or [`matrix`](https://github.com/dstructs/matrix), the output data structure is of type `int8`. If the `copy` option is `false`, the original data type of the [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays) or [`matrix`](https://github.com/dstructs/matrix) is preserved.
 
 
 ## Notes
@@ -295,7 +295,7 @@ $ make view-cov
 
 ## Copyright
 
-Copyright &copy; 2014-2015. Athan Reines.
+Copyright &copy; 2014-2015. The [Compute.io](https://github.com/compute-io) Authors.
 
 
 [npm-image]: http://img.shields.io/npm/v/compute-signum.svg

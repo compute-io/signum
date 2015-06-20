@@ -62,22 +62,22 @@ describe( 'matrix signum', function tests() {
 		actual = signum( actual, mat );
 
 		assert.deepEqual( actual.data, out.data );
-
 	});
 
-	it( 'should return null if provided an empty matrix', function test() {
-		var out, mat;
+	it( 'should return an empty matrix if provided an empty matrix', function test() {
+		var out, mat, expected;
 
 		out = matrix( [0,0] );
+		expected = matrix( [0,0] );
 
 		mat = matrix( [0,10] );
-		assert.isNull( signum( out, mat ) );
+		assert.deepEqual( signum( out, mat ).data, expected.data );
 
 		mat = matrix( [10,0] );
-		assert.isNull( signum( out, mat ) );
+		assert.deepEqual( signum( out, mat ).data, expected.data );
 
 		mat = matrix( [0,0] );
-		assert.isNull( signum( out, mat ) );
+		assert.deepEqual( signum( out, mat ).data, expected.data );
 	});
 
 });

@@ -74,13 +74,15 @@ describe( 'compute-signum', function tests() {
 		}
 	});
 
-	it( 'should compute the error function when provided a number', function test() {
+	it( 'should compute the signum function when provided a number', function test() {
+		var val;
+
 		assert.strictEqual( signum( 0 ), 0 );
 
-		var val = signum( NaN );
+		val = signum( NaN );
 		assert.isNumber( val );
 		assert.ok( val !== val );
-		
+
 		assert.strictEqual( signum( 2 ), 1 );
 		assert.strictEqual( signum( -3 ), -1 );
 	});
@@ -211,7 +213,6 @@ describe( 'compute-signum', function tests() {
 		assert.strictEqual( actual, data );
 
 		assert.deepEqual( actual, expected );
-
 	});
 
 	it( 'should evaluate the signum function element-wise when provided a matrix', function test() {
@@ -240,10 +241,12 @@ describe( 'compute-signum', function tests() {
 		assert.deepEqual( mat.data, d2 );
 	});
 
-	it( 'should return `null` if provided an empty data structure', function test() {
-		assert.isNull( signum( [] ) );
-		assert.isNull( signum( matrix( [0,0] ) ) );
-		assert.isNull( signum( new Int8Array() ) );
+	it( 'should return an empty data structure if provided an empty data structure', function test() {
+		assert.deepEqual( signum( [] ), [] );
+
+		assert.deepEqual( signum( matrix( [0,0] ) ).data, matrix( [0,0], 'int8' ).data );
+
+		assert.deepEqual( signum( new Int8Array() ), new Int8Array() );
 	});
 
 });

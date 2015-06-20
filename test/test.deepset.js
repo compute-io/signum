@@ -76,9 +76,17 @@ describe( 'deepset signum', function tests() {
 		assert.deepEqual( data, expected );
 	});
 
-	it( 'should return null if provided an empty array', function test() {
-		assert.isNull( signum( [], 'x' ) );
-		assert.isNull( signum( [], 'x', '/' ) );
+	it( 'should return an unmodified input array if provided an empty array', function test() {
+		var arr = [],
+			s;
+
+		s = signum( arr, 'x' );
+		assert.strictEqual( arr, s );
+		assert.deepEqual( arr, s  );
+
+		s = signum( arr, 'x', '/' );
+		assert.strictEqual( arr, s );
+		assert.deepEqual( arr, s );
 	});
 
 });

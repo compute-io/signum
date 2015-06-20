@@ -36,7 +36,14 @@
     "math",
     "array",
     "positive",
-    "negative"
+    "negative",
+    "matrix",
+    "matrices",
+    "arrays",
+    "accessor",
+    "deepset",
+    "special function",
+    "dstructs"
   ],
   "bugs": {
     "url": "https://github.com/compute-io/signum/issues"

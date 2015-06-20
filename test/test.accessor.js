@@ -24,7 +24,7 @@ describe( 'accessor signum', function tests() {
 		expect( signum ).to.be.a( 'function' );
 	});
 
-	it( 'should evaluate the error function using an accessor', function test() {
+	it( 'should evaluate the signum function using an accessor', function test() {
 		var data, actual, expected;
 
 		data = [
@@ -47,11 +47,10 @@ describe( 'accessor signum', function tests() {
 		function getValue( d ) {
 			return d.x;
 		}
-
 	});
 
-	it( 'should return null if provided an empty array', function test() {
-		assert.isNull( signum( [], [], getValue ) );
+	it( 'should return an empty array if provided an empty array', function test() {
+		assert.deepEqual( signum( [], [], getValue ), [] );
 		function getValue( d ) {
 			return d.x;
 		}

@@ -7,7 +7,7 @@ signum
 The [Signum](http://en.wikipedia.org/wiki/Sign_function) function is defined as
 
 <div class="equation" align="center" data-raw-text="\operatorname{sign}(x) := \begin{cases} -1 &amp; \textrm{if}\ x < 0 \\ 0 &amp; \textrm{if}\ x = 0 \\ 1 &amp; \textrm{if}\ x > 0 \end{cases}" data-equation="eq:signum_function">
-	<img src="" alt="Definition of the signum function.">
+	<img src="https://cdn.rawgit.com/compute-io/signum/4c82603f0fd42899c4a2f767cd4a6061a83b14b2/docs/img/eqn.svg" alt="Definition of the signum function.">
 	<br>
 </div>
 

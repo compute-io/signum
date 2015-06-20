@@ -4,6 +4,15 @@ signum
 
 > [Signum](http://en.wikipedia.org/wiki/Sign_function) function.
 
+The [Signum](http://en.wikipedia.org/wiki/Sign_function) function is defined as
+
+<div class="equation" align="center" data-raw-text="\operatorname{sign}(x) := \begin{cases} -1 &amp; \textrm{if}\ x < 0 \\ 0 &amp; \textrm{if}\ x = 0 \\ 1 &amp; \textrm{if}\ x > 0 \end{cases}" data-equation="eq:signum_function">
+	<img src="https://cdn.rawgit.com/compute-io/signum/4c82603f0fd42899c4a2f767cd4a6061a83b14b2/docs/img/eqn.svg" alt="Definition of the signum function.">
+	<br>
+</div>
+
+for any real number `x`.
+
 
 ## Installation
 
@@ -22,41 +31,63 @@ var signum = require( 'compute-signum' );
 
 #### signum( x[, options] )
 
-Evaluates the [signum](http://en.wikipedia.org/wiki/Sign_function) function. The method accepts as its first argument either a single `numeric` value or an `array` of numeric values, which may include `NaN`, `+infinity`, and `-infinity`. For an input `array`, the [signum](http://en.wikipedia.org/wiki/Sign_function) function is evaluated for each value.
+Evaluates the [signum](http://en.wikipedia.org/wiki/Sign_function) function. `x` may be either a [`number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number), an [`array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), a [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays), or a [`matrix`](https://github.com/dstructs/matrix). Values may include `NaN`, `+infinity`, and `-infinity`
 
 ``` javascript
-var sgn = signum( -10 );
+var matrix = require( 'dstructs-matrix' ),
+	data,
+	mat,
+	out,
+	i;
+
+out = signum( -10 );
 // returns -1
 
-var sgns = signum( [ -10, -1, -0, 0, 1, 10 ] );
+out = signum( [ -10, -1, -0, 0, 1, 10 ] );
 // returns [ -1, -1, 0, 0, 1, 1 ]
+
+data = [ -2, 0, 2 ];
+out = signum( data );
+// returns [ -1, 0, 1 ]
+
+data = new Float64Array( data );
+out = signum( data );
+// returns Int8Array( [ -1, 0, 1 ] )
+
+data = new Float64Array( 6 );
+for ( i = 0; i < 6; i++ ) {
+	data[ i ] = i - 3;
+}
+mat = matrix( data, [3,2], 'float64' );
+/*
+	[ -3 -2
+	  -1  0
+	   1  2 ]
+*/
+
+out = signum( mat );
+/*
+	[ -1 -1
+	  -1  0
+	   1  1 ]
+*/
 ```
 
-When provided an input `array`, the function accepts two `options`:
+The function accepts the following `options`:
 
-*  __copy__: `boolean` indicating whether to return a new `array` containing the signum values. Default: `true`.
-*  __accessor__: accessor `function` for accessing numeric values in object `arrays`.
+* 	__accessor__: accessor `function` for accessing `array` values.
+*	__copy__: `boolean` indicating if the `function` should return a new data structure. Default: `true`.
+*	__path__: [deepget](https://github.com/kgryte/utils-deep-get)/[deepset](https://github.com/kgryte/utils-deep-set) key path.
+*	__sep__: [deepget](https://github.com/kgryte/utils-deep-get)/[deepset](https://github.com/kgryte/utils-deep-set) key path separator. Default: `'.'`.
 
-To mutate the input `array` (e.g. when input values can be discarded or when optimizing memory usage), set the `copy` option to `false`.
 
-``` javascript
-var arr = [ -10, -1, -0, 0, 1, 10 ];
-
-var sgns = signum( arr, {
-	'copy': false
-});
-// returns [ -1, -1, -0, 0, 1, 1 ]
-
-console.log( arr === sgns );
-// returns true
-```
-
-For object `arrays`, provide an accessor `function` for accessing `array` values.
+For non-numeric `arrays`, provide an accessor `function` for accessing `array` values.
 
 ``` javascript
 var data = [
 	['beep', -10],
 	['boop', -1],
+	['bip', 0],
 	['bap', 1],
 	['baz', 10]
 ];
@@ -65,15 +96,82 @@ function getValue( d, i ) {
 	return d[ 1 ];
 }
 
-var sgns = signum( data, {
+var out = signum( data, {
 	'accessor': getValue
 });
-// returns [ -1, -1, 1, 1 ]
+// returns [ -1, -1, 0, 1, 1 ]
 ```
 
-__Note__: the function returns an `array` with a length equal to the original input `array`.
+To [deepset](https://github.com/kgryte/utils-deep-set) an object `array`, provide a key path and, optionally, a key path separator.
 
+``` javascript
+var data = [
+	{'x':[0,-10]},
+	{'x':[1,-1]},
+	{'x':[2,0]},
+	{'x':[3,1]},
+	{'x':[4,10]}
+];
 
+var out = signum( data, 'x|1', '|' );
+/*
+	[
+		{'x':[0,-1]},
+		{'x':[1,-1]},
+		{'x':[2,0]},
+		{'x':[3,1]},
+		{'x':[4,1]}
+	]
+*/
+
+var bool = ( data === out );
+// returns true
+```
+
+By default, the function returns a new data structure. To mutate the input data structure (e.g., when input values can be discarded or when optimizing memory usage), set the `copy` option to `false`.
+
+``` javascript
+var data,
+	bool,
+	mat,
+	out,
+	i;
+
+var data = [ -10, -1, 0, 1, 10 ];
+
+var out = signum( data, {
+	'copy': false
+});
+// returns [ -1, -1, 0, 1, 1 ]
+
+bool = ( data === out );
+// returns true
+
+data = new Int8Array( 6 );
+for ( i = 0; i < 6; i++ ) {
+	data[ i ] = i - 3;
+}
+mat = matrix( data, [3,2], 'int8' );
+/*
+	[ -3 -2
+	  -1  0
+	   1  2 ]
+*/
+
+out = signum( mat, {
+	'copy': false
+});
+/*
+	[ -1 -1
+	  -1  0
+	   1  1 ]
+*/
+
+bool = ( mat === out );
+// returns true
+```
+
+When provided a [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays) or [`matrix`](https://github.com/dstructs/matrix), the output data structure is of type `int8`. If the `copy` option is `false`, the original data type of the [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays) or [`matrix`](https://github.com/dstructs/matrix) is preserved.
 
 
 ## Notes
@@ -91,18 +189,66 @@ Value | Sign
 The above results are compatible with an ECMAScript 6 [proposal](http://people.mozilla.org/~jorendorff/es6-draft.html#sec-math.sign) from Mozilla, which would extend the `Math` object to include the method `Math.sign()`. Currently, only [Mozilla](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/sign) implements this proposal.
 
 
-
 ## Examples
 
 ``` javascript
-var signum = require( 'compute-signum' );
+var matrix = require( 'dstructs-matrix' ),
+	signum = require( 'compute-signum' );
 
-var data = new Array( 100 );
-for ( var i = 0; i < data.length; i++ ) {
-	data[ i ] = Math.random() - 0.5;
+var data,
+	mat,
+	out,
+	tmp,
+	i;
+
+// Plain arrays...
+data = new Array( 10 );
+for ( i = 0; i < data.length; i++ ) {
+	data[ i ] = Math.random()*20 - 10;
+}
+out = signum( data );
+
+// Object arrays (accessors)...
+function getValue( d ) {
+	return d.x;
+}
+for ( i = 0; i < data.length; i++ ) {
+	data[ i ] = {
+		'x': data[ i ]
+	};
+}
+out = signum( data, {
+	'accessor': getValue
+});
+
+// Deep set arrays...
+for ( i = 0; i < data.length; i++ ) {
+	data[ i ] = {
+		'x': [ i, data[ i ].x ]
+	};
+}
+out = signum( data, {
+	'path': 'x/1',
+	'sep': '/'
+});
+
+// Typed arrays...
+data = new Int32Array( 10 );
+for ( i = 0; i < data.length; i++ ) {
+	data[ i ] = Math.random()*20 - 10;
+}
+tmp = signum( data );
+out = '';
+for ( i = 0; i < data.length; i++ ) {
+	out += tmp[ i ];
+	if ( i < data.length-1 ) {
+		out += ',';
+	}
 }
 
-console.log( signum( data ) );
+// Matrices...
+mat = matrix( data, [5,2], 'int32' );
+out = signum( mat );
 ```
 
 To run the example code from the top-level application directory,
@@ -149,7 +295,7 @@ $ make view-cov
 
 ## Copyright
 
-Copyright &copy; 2014-2015. Athan Reines.
+Copyright &copy; 2014-2015. The [Compute.io](https://github.com/compute-io) Authors.
 
 
 [npm-image]: http://img.shields.io/npm/v/compute-signum.svg

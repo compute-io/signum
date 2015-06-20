@@ -60,9 +60,9 @@ for ( i = 0; i < 6; i++ ) {
 }
 mat = matrix( data, [3,2], 'float64' );
 /*
-	[  -3  -2
-	   -1   0
-	    1   2 ]
+	[ -3 -2
+	  -1  0
+	   1  2 ]
 */
 
 out = signum( mat );

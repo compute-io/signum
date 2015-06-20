@@ -13,6 +13,7 @@ The [Signum](http://en.wikipedia.org/wiki/Sign_function) function is defined as
 
 for any real number `x`.
 
+
 ## Installation
 
 ``` bash

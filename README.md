@@ -1,6 +1,6 @@
 signum
 ===
-[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependencies][dependencies-image]][dependencies-url]
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][codecov-image]][codecov-url] [![Dependencies][dependencies-image]][dependencies-url]
 
 > [Signum](http://en.wikipedia.org/wiki/Sign_function) function.
 
@@ -113,7 +113,10 @@ var data = [
 	{'x':[4,10]}
 ];
 
-var out = signum( data, 'x|1', '|' );
+var out = signum( data, {
+	'path': 'x|1',
+	'sep': '|'
+});
 /*
 	[
 		{'x':[0,-1]},
@@ -204,7 +207,7 @@ var data,
 // Plain arrays...
 data = new Array( 10 );
 for ( i = 0; i < data.length; i++ ) {
-	data[ i ] = Math.random()*20 - 10;
+	data[ i ] = Math.random() * 20 - 10;
 }
 out = signum( data );
 
@@ -235,7 +238,7 @@ out = signum( data, {
 // Typed arrays...
 data = new Int32Array( 10 );
 for ( i = 0; i < data.length; i++ ) {
-	data[ i ] = Math.random()*20 - 10;
+	data[ i ] = Math.random() * 20 - 10;
 }
 tmp = signum( data );
 out = '';
@@ -304,8 +307,8 @@ Copyright &copy; 2014-2015. The [Compute.io](https://github.com/compute-io) Auth
 [travis-image]: http://img.shields.io/travis/compute-io/signum/master.svg
 [travis-url]: https://travis-ci.org/compute-io/signum
 
-[coveralls-image]: https://img.shields.io/coveralls/compute-io/signum/master.svg
-[coveralls-url]: https://coveralls.io/r/compute-io/signum?branch=master
+[codecov-image]: https://img.shields.io/codecov/c/github/compute-io/signum/master.svg
+[codecov-url]: https://codecov.io/github/compute-io/signum?branch=master
 
 [dependencies-image]: http://img.shields.io/david/compute-io/signum.svg
 [dependencies-url]: https://david-dm.org/compute-io/signum
